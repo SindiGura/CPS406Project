@@ -1,5 +1,3 @@
-
-
 function CreateAccountPage() {
   return (
     <div>
