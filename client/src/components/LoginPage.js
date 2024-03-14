@@ -9,7 +9,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function handleSubmit(e: {preventDefault: () => void;}) {
+  async function handleSubmit(e) {
     e.preventDefault(); 
     if(!email)
       console.error("You need a email")
@@ -73,7 +73,7 @@ function LoginPage() {
                 </button>
               </div>
               <div className="col-span-full">
-              <Link to="/create"
+              <Link to="/create-account"
                   className="items-center justify-center w-full px-3 text-center text-black duration-200 hover:text-slate-400 "
                   type="submit"
                 >

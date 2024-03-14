@@ -7,15 +7,24 @@ function CreateAccountPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
 
-  async function handleSubmit(e: {preventDefault: () => void;}) {
+  async function handleSubmit(e) {
     e.preventDefault(); 
     if(!email)
-      console.error("You need a userName")
+      console.error("You need an email")
     else if (!password)
       console.error("You need a password")
+    else if (!name)
+      console.error("You need a name")
+    else if (!address)
+      console.error("You need an address")
+    else if (!phone)
+      console.error("You need a phone number")
     else{//get server response and post info
-        const response = await axios.post('http://localhost:5000/createAccount', { "email" : email, "password" :password })
+        const response = await axios.post('http://localhost:5000/createAccount', { "email" : email, "password" : password, "name" : name, "address" : address, "phone" : phone })
         .catch((error) =>{
           console.error(error)
         })
@@ -57,6 +66,45 @@ function CreateAccountPage() {
                   type="password"
                   className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                   placeholder="******"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="col-span-full">
+                <label className="block mb-3 text-sm font-medium text-gray-600" htmlFor="name">
+                  Name
+                </label>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  type="name"
+                  className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                  placeholder="John Doe"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="col-span-full">
+                <label className="block mb-3 text-sm font-medium text-gray-600" htmlFor="address">
+                  Address
+                </label>
+                <input
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  type="address"
+                  className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                  placeholder="123 Toronto Street"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="col-span-full">
+                <label className="block mb-3 text-sm font-medium text-gray-600" htmlFor="phone">
+                  Phone Number
+                </label>
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  type="phone"
+                  className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                  placeholder="1234567890"
                   autoComplete="off"
                 />
               </div>
