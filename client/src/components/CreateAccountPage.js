@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import axios from "axios";
 
 function CreateAccountPage() {
 
@@ -23,25 +22,32 @@ function CreateAccountPage() {
       console.error("You need an address")
     else if (!phone)
       console.error("You need a phone number")
-    else{//get server response and post info
-        const response = await axios.post('http://localhost:5000/createAccount', { "email" : email, "password" : password, "name" : name, "address" : address, "phone" : phone })
-        .catch((error) =>{
-          console.error(error)
-        })
-        console.log(response)
+    else {//get server response and post info
+      fetch("http://localhost:5000/create-account", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}`, "name" : `${name}`, "address" : `${address}`, "phone" : `${phone}` })
+      }).then((response) => {
+        if(response.ok) {
+          console.log("ok")
+        }
+      }).catch(() => {
+        console.log("not ok")
+      })
     }
   }
 
   return (
     <section>
-      <div className=" relative items-center w-full px-5 py-40 mx-auto md:px-12 lg:px-20 max-w-7xl">
+      <div className="relative items-center w-full px-5 py-40 mx-auto md:px-12 lg:px-20 max-w-7xl">
         <div className="w-full max-w-md mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4">
           <div className="flex flex-col">
             <div>
               <h2 className="text-4xl text-black text-center">CREATE ACCOUNT</h2>
             </div>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className="mt-4 space-y-6">
               <div className="col-span-full">
                 <label className="block mb-3 text-sm font-medium text-gray-600" htmlFor="email">
@@ -113,6 +119,7 @@ function CreateAccountPage() {
                 <button
                   className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"
                   type="submit"
+                  onClick={handleSubmit}
                 >
                   Create New Account
                 </button>
