@@ -30,10 +30,10 @@ function CreateAccountPage() {
         body: JSON.stringify({ "email" : `${email}`, "password" : `${password}`, "name" : `${name}`, "address" : `${address}`, "phone" : `${phone}` })
       }).then((response) => {
         if(response.ok) {
-          console.log("ok")
+          console.log("ok");
         }
-      }).catch(() => {
-        console.log("not ok")
+      }).catch((error) => {
+        console.log(error);
       })
     }
   }

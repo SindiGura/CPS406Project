@@ -1,11 +1,8 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import { Link } from 'react-router-dom';
 
 function LoginPage() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,15 +12,19 @@ function LoginPage() {
       console.error("You need a email")
     else if (!password)
       console.error("You need a password")
-    else{
-        const response = await axios.post('http://localhost:5000/login', { "email" : email, "password" :password }).catch((error) =>{ //go to database and see response
-          console.error(error)
-        })
-        //if database manages to find matching data
-        if(response){
-          window.location.href=(`/home?parameter=${email}`)
+    else {//get server response and post info
+      fetch("http://localhost:5000/login", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}` })
+      }).then((response) => {
+        if(response.ok) {
+          window.location.href=(`/home?user=${email}`)
         }
-          // result == true
+      }).catch((error) => {
+        console.log(error);
+      })
     }
   }
 

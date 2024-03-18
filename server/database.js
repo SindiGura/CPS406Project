@@ -19,6 +19,13 @@ function createClassTables() {
     });
 }
 
+function selectAllMembers() {
+    database.all("select * from members",
+    (error, row) => {
+        error ? console.log(error) : console.log(row);
+    })
+}
+
 function insertMember(email, password, name, address, phone) {
     database.all("insert into members (email, password, name, address, phone) values ($email, $password, $name, $address, $phone)",
     {
@@ -44,6 +51,7 @@ function checkPassword(email) {
 module.exports = {
     createMembersTable,
     createClassTables,
+    selectAllMembers,
     insertMember,
     checkPassword
 }
