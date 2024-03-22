@@ -7,6 +7,7 @@ function Navbar() {
         <ul className="mt-6 mb-10">
           <li className="inline px-11"><Link className="no-underline text-xl font-medium text-slate-800 hover:text-slate-500" to="/login">Login</Link></li>
           <li className="inline px-11"><Link className="no-underline text-xl font-medium text-slate-800 hover:text-slate-500" to="/create-account">Create Account</Link></li>
+          <li className="inline px-11"><Link className="no-underline text-xl font-medium text-slate-800 hover:text-slate-500" to="/classes">Classes</Link></li>
         </ul>
       </div>
     </div>

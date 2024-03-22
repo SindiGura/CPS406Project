@@ -58,3 +58,42 @@ app.post("/login", (req, res) => {
         }
     })
 })
+
+app.get("/class/:num", (req, res) => {
+    if(req.params.num === "1") {
+        database.all("select * from members",
+        (error, row) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                res.status(200).json({row: row});
+            }
+        })
+    }
+    else if(req.params.num === "2") {
+        database.all("select * from members",
+        (error, row) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                res.status(200).json({row: row});
+            }
+        })
+    }
+    else if(req.params.num === "3") {
+        database.all("select * from members",
+        (error, row) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                res.status(200).json({row: row});
+            }
+        })
+    }
+    else {
+        res.sendStatus(500);
+    }
+})
