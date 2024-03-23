@@ -1,33 +1,140 @@
 import React from 'react';
+import { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 
-function HomePage(props) {
+function HomePage() {
+
+  const {state} = useLocation();
+  const {email, name} = state;
+
+  const [class1, setClass1] = useState("You are not currently attending Class 1, would you like to join?");
+  const [class1Pay, setClass1Pay] = useState("Would you like to pay now or later?");
+  const [class2, setClass2] = useState("You are not currently attending Class 2, would you like to join?");
+  const [class2Pay, setClass2Pay] = useState("Would you like to pay now or later?");
+  const [class3, setClass3] = useState("You are not currently attending Class 3, would you like to join?");
+  const [class3Pay, setClass3Pay] = useState("Would you like to pay now or later?");
 
   async function handleSubmit() {
     
   }
 
+  useEffect(() => {
+    fetch("http://localhost:5000/members/1", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "email" : `${email}` })
+      }).then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        if(data.row.length === 0) {
+          setClass1("You are not currently attending Class 1, would you like to join?");
+        }
+        else {
+          setClass1("You have signed up for Class 1!");
+          document.getElementById("class-1-a").classList.add("hidden");
+          if(data.row[0].paid === 1) {
+            setClass1Pay("You have paid for Class 1.");
+            document.getElementById("class-1-pay-a").classList.add("hidden");
+          }
+          else {
+            setClass1Pay("Would you like to pay now or later?");
+            document.getElementById("class-1-pay-a").classList.remove("hidden");
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+
+      fetch("http://localhost:5000/members/2", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "email" : `${email}` })
+      }).then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        if(data.row.length === 0) {
+          setClass2("You are not currently attending Class 2, would you like to join?");
+        }
+        else {
+          setClass2("You have signed up for Class 2!");
+          document.getElementById("class-2-a").classList.add("hidden");
+          if(data.row[0].paid === 1) {
+            setClass2Pay("You have paid for Class 2.");
+            document.getElementById("class-2-pay-a").classList.add("hidden");
+          }
+          else {
+            setClass2Pay("Would you like to pay now or later?");
+            document.getElementById("class-2-pay-a").classList.remove("hidden");
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+
+      fetch("http://localhost:5000/members/3", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "email" : `${email}` })
+      }).then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        if(data.row.length === 0) {
+          setClass3("You are not currently attending Class 3, would you like to join?");
+        }
+        else {
+          setClass3("You have signed up for Class 3!");
+          document.getElementById("class-3-a").classList.add("hidden");
+          if(data.row[0].paid === 1) {
+            setClass3Pay("You have paid for Class 3.");
+            document.getElementById("class-3-pay-a").classList.add("hidden");
+          }
+          else {
+            setClass3Pay("Would you like to pay now or later?");
+            document.getElementById("class-3-pay-a").classList.remove("hidden");
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+  })
+
   function showPay1() {
-    document.getElementById("class1").classList.remove("hidden");
+    document.getElementById("class-1-pay").classList.remove("hidden");
+    document.getElementById("class-1-pay-a").classList.remove("hidden");
   }
 
   function hidePay1() {
-    document.getElementById("class1").classList.add("hidden");
+    document.getElementById("class-1-pay").classList.add("hidden");
+    document.getElementById("class-1-pay-a").classList.add("hidden");
   }
 
   function showPay2() {
-    document.getElementById("class2").classList.remove("hidden");
+    document.getElementById("class-2-pay").classList.remove("hidden");
+    document.getElementById("class-2-pay-a").classList.remove("hidden");
   }
 
   function hidePay2() {
-    document.getElementById("class2").classList.add("hidden");
+    document.getElementById("class-2-pay").classList.add("hidden");
+    document.getElementById("class-2-pay-a").classList.add("hidden");
   }
 
   function showPay3() {
-    document.getElementById("class3").classList.remove("hidden");
+    document.getElementById("class-3-pay").classList.remove("hidden");
+    document.getElementById("class-3-pay-a").classList.remove("hidden");
   }
 
   function hidePay3() {
-    document.getElementById("class3").classList.add("hidden");
+    document.getElementById("class-3-pay").classList.add("hidden");
+    document.getElementById("class-3-pay-a").classList.add("hidden");
   }
   
   return (
@@ -36,86 +143,98 @@ function HomePage(props) {
         <div className="w-full max-w-md mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4">
           <div className="flex flex-col">
             <div>
-              <h2 className="text-4xl text-black text-center">Welcome, Name</h2>
+              <h2 className="text-4xl text-black text-center">Welcome, {name}</h2>
             </div>
           </div>
           <form>
             <div className="mt-4 space-y-6">
               <div className="col-span-full">
-                <label className="block mb-3 text-md font-medium text-gray-600" htmlFor="class1">
-                  You are not currently attending Class 1, would you like to join?
+                <label className="block mb-3 text-md font-medium text-gray-600">
+                  {class1}
                 </label>
-                <div class="flex items-center mb-4">
-                  <input onClick={showPay1} id="class-1-yes" type="radio" value="" name="class-1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                  <label for="class-1-yes" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
-                </div>
-                <div class="flex items-center mb-4">
-                  <input onClick={hidePay1}  id="class-1-no" type="radio" value="" name="class-1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                  <label for="class-1-no" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
-                </div>
-                <div id="class1" className="hidden">
-                  <label className="block mb-3 text-md font-medium text-gray-600" htmlFor="class1">
-                    Would you like to pay now or later?
-                  </label>
-                  <div class="flex items-center mb-4">
-                    <input id="class-1-now" type="radio" value="" name="class-1-pay" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                    <label for="class-1-now" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
+                <div id="class-1-a">
+                  <div className="flex items-center mb-4">
+                    <input onClick={showPay1} type="radio" name="class-1" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                    <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
                   </div>
-                  <div class="flex items-center mb-4">
-                    <input id="class-1-later" type="radio" value="" name="class-1-pay" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                    <label for="class-1-later" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
+                  <div className="flex items-center mb-4">
+                    <input onClick={hidePay1} type="radio" name="class-1" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                    <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
+                  </div>
+                </div>
+                <div>
+                  <label id="class-1-pay" className="block mb-3 text-md font-medium text-gray-600 hidden">
+                    {class1Pay}
+                  </label>
+                  <div id="class-1-pay-a" className="hidden">
+                    <div className="flex items-center mb-4">
+                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
+                    </div>
+                    <div className="flex items-center mb-4">
+                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="col-span-full">
-                <label className="block mb-3 text-md font-medium text-gray-600" htmlFor="class2">
-                  You are not currently attending Class 2, would you like to join?
+                <label className="block mb-3 text-md font-medium text-gray-600">
+                  {class2}
                 </label>
-                <div class="flex items-center mb-4">
-                  <input onClick={showPay2} id="class-2-yes" type="radio" value="" name="class-2" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                  <label for="class-2-yes" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
-                </div>
-                <div class="flex items-center mb-4">
-                  <input onClick={hidePay2} id="class-2-no" type="radio" value="" name="class-2" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                  <label for="class-2-no" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
-                </div>
-                <div id="class2" className="hidden">
-                  <label className="block mb-3 text-md font-medium text-gray-600" htmlFor="class2">
-                    Would you like to pay now or later?
-                  </label>
-                  <div class="flex items-center mb-4">
-                    <input id="class-2-now" type="radio" value="" name="class-1-pay" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                    <label for="class-2-now" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
+                <div id="class-2-a">
+                  <div className="flex items-center mb-4">
+                    <input onClick={showPay2} id="class-2-yes" type="radio" name="class-2" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                    <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
                   </div>
-                  <div class="flex items-center mb-4">
-                    <input id="class-2-later" type="radio" value="" name="class-1-pay" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                    <label for="class-2-later" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
+                  <div className="flex items-center mb-4">
+                    <input onClick={hidePay2} id="class-2-no" type="radio" name="class-2" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                    <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
+                  </div>
+                </div>
+                <div>
+                  <label id="class-2-pay" className="block mb-3 text-md font-medium text-gray-600 hidden">
+                    {class2Pay}
+                  </label>
+                  <div id="class-2-pay-a" className="hidden">
+                    <div className="flex items-center mb-4">
+                      <input type="radio" value="" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
+                    </div>
+                    <div className="flex items-center mb-4">
+                      <input type="radio" value="" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="col-span-full">
-                <label className="block mb-3 text-md font-medium text-gray-600" htmlFor="class3">
-                  You are not currently attending Class 3, would you like to join?
+                <label className="block mb-3 text-md font-medium text-gray-600">
+                  {class3}
                 </label>
-                <div class="flex items-center mb-4">
-                  <input onClick={showPay3} id="class-3-yes" type="radio" value="" name="class-3" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                  <label for="class-3-yes" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
-                </div>
-                <div class="flex items-center mb-4">
-                  <input onClick={hidePay3} id="class-3-no" type="radio" value="" name="class-3" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                  <label for="class-3-no" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
-                </div>
-                <div id="class3" className="hidden">
-                  <label className="block mb-3 text-md font-medium text-gray-600" htmlFor="class3">
-                    Would you like to pay now or later?
-                  </label>
-                  <div class="flex items-center mb-4">
-                    <input id="class-3-now" type="radio" value="" name="class-1-pay" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                    <label for="class-3-now" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
+                <div id="class-3-a">
+                  <div className="flex items-center mb-4">
+                    <input onClick={showPay3} type="radio" name="class-3" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                    <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
                   </div>
-                  <div class="flex items-center mb-4">
-                    <input id="class-3-later" type="radio" value="" name="class-1-pay" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                    <label for="class-3-later" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
+                  <div className="flex items-center mb-4">
+                    <input onClick={hidePay3} type="radio"name="class-3" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                    <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
+                  </div>
+                </div>
+                <div>
+                  <label id="class-3-pay" className="block mb-3 text-md font-medium text-gray-600 hidden">
+                    {class3Pay}
+                  </label>
+                  <div id="class-3-pay-a" className="hidden">
+                    <div className="flex items-center mb-4">
+                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
+                    </div>
+                    <div className="flex items-center mb-4">
+                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
+                    </div>
                   </div>
                 </div>
               </div>

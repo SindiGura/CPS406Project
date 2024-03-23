@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault(); 
@@ -20,8 +21,10 @@ function LoginPage() {
         body: JSON.stringify({ "email" : `${email}`, "password" : `${password}` })
       }).then((response) => {
         if(response.ok) {
-          window.location.href=(`/home?user=${email}`)
+          return response.json();
         }
+      }).then((data) => {
+        navigate("/home", {state: {email: data.row[0].email, name: data.row[0].name}});
       }).catch((error) => {
         console.log(error);
       })

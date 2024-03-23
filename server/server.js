@@ -46,17 +46,62 @@ app.post("/create-account", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-    database.all("select password from members where email = $email",
+    database.all("select * from members where email = $email",
     {
         $email: req.body.email
     }, (error, row) => {
         if(row.length !== 0 && row[0].password === req.body.password) {
-            res.sendStatus(200);
+            res.status(200).json({row: row});
         }
         else {
             res.sendStatus(500);
         }
     })
+})
+
+app.post("/members/:num", (req, res) => {
+    if(req.params.num === "1") {
+        database.all("select * from class1 where member = $email",
+        {
+            $email: req.body.email
+        }, (error, row) => {
+            if(row.length !== 0) {
+                res.status(200).json({row: row});
+            }
+            else {
+                res.status(200).json({row: []});
+            }
+        })
+    }
+    else if(req.params.num === "2") {
+        database.all("select * from class2 where member = $email",
+        {
+            $email: req.body.email
+        }, (error, row) => {
+            if(row.length !== 0) {
+                res.status(200).json({row: row});
+            }
+            else {
+                res.status(200).json({row: []});
+            }
+        })
+    }
+    else if(req.params.num === "3") {
+        database.all("select * from class3 where member = $email",
+        {
+            $email: req.body.email
+        }, (error, row) => {
+            if(row.length !== 0) {
+                res.status(200).json({row: row});
+            }
+            else {
+                res.status(200).json({row: []});
+            }
+        })
+    }
+    else {
+        res.sendStatus(500);
+    }
 })
 
 app.get("/class/:num", (req, res) => {
