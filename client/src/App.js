@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import LoginPage from './components/LoginPage';
 import CreateAccountPage from './components/CreateAccountPage';
 import ClassesPage from './components/ClassesPage';
+import HomePage from './components/HomePage';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
       }/>
       <Route path="/classes" element={
         <ClassesPage/>
+      }/>
+      <Route path="/home" element={
+        <HomePage/>
       }/>
     </Routes>
   );

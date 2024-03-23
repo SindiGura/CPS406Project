@@ -30,7 +30,7 @@ function CreateAccountPage() {
         body: JSON.stringify({ "email" : `${email}`, "password" : `${password}`, "name" : `${name}`, "address" : `${address}`, "phone" : `${phone}` })
       }).then((response) => {
         if(response.ok) {
-          console.log("ok");
+          window.location.href=(`/login`)
         }
       }).catch((error) => {
         console.log(error);
