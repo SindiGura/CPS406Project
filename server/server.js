@@ -16,6 +16,59 @@ app.listen(PORT, () => {
         error ? console.log(error) : console.log(row);
     })
 })
+app.post("/delete-from-classes", (req, res) => {
+    database.all("delete from class1")
+    database.all("delete from class2")
+    database.all("delete from class3")
+})
+
+app.post("/submit-classes", (req, res) => {
+    //database.all("delete from class1")
+    //database.all("delete from class2")
+    //database.all("delete from class3")
+    if(req.body.class1 === "1"){
+        
+        database.all("insert into class1 (member, paid) values ($member, $paid)",
+        {
+            $member: req.body.member,
+            $paid : 0
+        }, (error) => {
+            if(error) {
+                res.status(500);
+            }
+            else {
+            }
+        })
+    }
+    if(req.body.class2 === "1"){
+        console.log("hello")
+        database.all("insert into class2 (member, paid) values ($member, $paid)",
+        {
+            $member: req.body.member,
+            $paid : 0
+        }, (error) => {
+            if(error) {
+                res.status(500);
+            }
+            else {
+            }
+        })
+    }
+    if(req.body.class3 === "1"){  
+        database.all("insert into class3 (member, paid) values ($member, $paid)",
+        {
+            $member: req.body.member,
+            $paid : 0
+        }, (error) => {
+            if(error) {
+                res.status(500);
+            }
+            else {
+            }
+        })
+    }
+})
+
 
 app.post("/create-account", (req, res) => {
     database.all("select email from members where email = $email",
