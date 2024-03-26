@@ -7,6 +7,9 @@ function HomePage() {
   const {state} = useLocation();
   const {email, name} = state;
 
+  const [aClass1, setAClass1] = useState(0);
+  const [aClass2, setAClass2] = useState(0);
+  const [aClass3, setAClass3] = useState(0);
   const [class1, setClass1] = useState("You are not currently attending Class 1, would you like to join?");
   const [class1Pay, setClass1Pay] = useState("Would you like to pay now or later?");
   const [class2, setClass2] = useState("You are not currently attending Class 2, would you like to join?");
@@ -14,8 +17,22 @@ function HomePage() {
   const [class3, setClass3] = useState("You are not currently attending Class 3, would you like to join?");
   const [class3Pay, setClass3Pay] = useState("Would you like to pay now or later?");
 
-  async function handleSubmit() {
-    
+  
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    fetch("http://localhost:5000/submit-classes", {
+      method: "POST",
+      mode: "cors",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`})
+    }).then((response)=>{
+      if(response.ok){
+        console.log("WORKED")
+      }
+    }).catch((error)=>{
+      console.log(error);
+    })
   }
 
   useEffect(() => {
@@ -108,31 +125,37 @@ function HomePage() {
   })
 
   function showPay1() {
+    setAClass1(1);
     document.getElementById("class-1-pay").classList.remove("hidden");
     document.getElementById("class-1-pay-a").classList.remove("hidden");
   }
 
   function hidePay1() {
+    setAClass1(0);
     document.getElementById("class-1-pay").classList.add("hidden");
     document.getElementById("class-1-pay-a").classList.add("hidden");
   }
 
   function showPay2() {
+    setAClass2(1);
     document.getElementById("class-2-pay").classList.remove("hidden");
     document.getElementById("class-2-pay-a").classList.remove("hidden");
   }
 
   function hidePay2() {
+    setAClass2(0);
     document.getElementById("class-2-pay").classList.add("hidden");
     document.getElementById("class-2-pay-a").classList.add("hidden");
   }
 
   function showPay3() {
+    setAClass3(1);
     document.getElementById("class-3-pay").classList.remove("hidden");
     document.getElementById("class-3-pay-a").classList.remove("hidden");
   }
 
   function hidePay3() {
+    setAClass3(0);
     document.getElementById("class-3-pay").classList.add("hidden");
     document.getElementById("class-3-pay-a").classList.add("hidden");
   }
