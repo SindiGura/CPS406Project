@@ -1,15 +1,19 @@
 import React from 'react';
 import { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function HomePage() {
 
   const {state} = useLocation();
   const {email, name} = state;
+  const navigate = useNavigate();
 
   const [aClass1, setAClass1] = useState(0);
   const [aClass2, setAClass2] = useState(0);
   const [aClass3, setAClass3] = useState(0);
+  const [aClass1Pay, setAClass1Pay] = useState(0);
+  const [aClass2Pay, setAClass2Pay] = useState(0);
+  const [aClass3Pay, setAClass3Pay] = useState(0);
   const [class1, setClass1] = useState("You are not currently attending Class 1, would you like to join?");
   const [class1Pay, setClass1Pay] = useState("Would you like to pay now or later?");
   const [class2, setClass2] = useState("You are not currently attending Class 2, would you like to join?");
@@ -17,18 +21,16 @@ function HomePage() {
   const [class3, setClass3] = useState("You are not currently attending Class 3, would you like to join?");
   const [class3Pay, setClass3Pay] = useState("Would you like to pay now or later?");
 
-  
-
   async function handleSubmit(e) {
-    e.preventDefault();
     fetch("http://localhost:5000/submit-classes", {
       method: "POST",
       mode: "cors",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`})
+      body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`, "class1pay" : `${aClass1Pay}`, "class2pay" : `${aClass2Pay}`, "class3pay" : `${aClass3Pay}` })
     }).then((response)=>{
       if(response.ok){
-        console.log("WORKED")
+        navigate("/home");
+        console.log("WORKED");
       }
     }).catch((error)=>{
       console.log(error);
@@ -58,6 +60,7 @@ function HomePage() {
           }
           else {
             setClass1Pay("Would you like to pay now or later?");
+            document.getElementById("class-1-pay").classList.remove("hidden");
             document.getElementById("class-1-pay-a").classList.remove("hidden");
           }
         }
@@ -87,6 +90,7 @@ function HomePage() {
           }
           else {
             setClass2Pay("Would you like to pay now or later?");
+            document.getElementById("class-2-pay").classList.remove("hidden");
             document.getElementById("class-2-pay-a").classList.remove("hidden");
           }
         }
@@ -116,6 +120,7 @@ function HomePage() {
           }
           else {
             setClass3Pay("Would you like to pay now or later?");
+            document.getElementById("class-3-pay").classList.remove("hidden");
             document.getElementById("class-3-pay-a").classList.remove("hidden");
           }
         }
@@ -159,6 +164,31 @@ function HomePage() {
     document.getElementById("class-3-pay").classList.add("hidden");
     document.getElementById("class-3-pay-a").classList.add("hidden");
   }
+
+  function nowPay1() {
+    setAClass1Pay(1);
+  }
+
+  function laterPay1() {
+    setAClass1Pay(0);
+  }
+
+  function nowPay2() {
+    setAClass2Pay(1);
+  }
+
+  function laterPay2() {
+    setAClass2Pay(0);
+  }
+
+  function nowPay3() {
+    setAClass3Pay(1);
+  }
+
+  function laterPay3() {
+    setAClass3Pay(0);
+  }
+
   
   return (
     <section>
@@ -191,11 +221,11 @@ function HomePage() {
                   </label>
                   <div id="class-1-pay-a" className="hidden">
                     <div className="flex items-center mb-4">
-                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <input onClick={nowPay1} type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                       <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
                     </div>
                     <div className="flex items-center mb-4">
-                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <input onClick={laterPay1} type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                       <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
                     </div>
                   </div>
@@ -221,11 +251,11 @@ function HomePage() {
                   </label>
                   <div id="class-2-pay-a" className="hidden">
                     <div className="flex items-center mb-4">
-                      <input type="radio" value="" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <input onClick={nowPay2} type="radio" value="" name="class-2-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                       <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
                     </div>
                     <div className="flex items-center mb-4">
-                      <input type="radio" value="" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <input onClick={laterPay2} type="radio" value="" name="class-2-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                       <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
                     </div>
                   </div>
@@ -251,11 +281,11 @@ function HomePage() {
                   </label>
                   <div id="class-3-pay-a" className="hidden">
                     <div className="flex items-center mb-4">
-                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <input onClick={nowPay3} type="radio" name="class-3-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                       <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Now</label>
                     </div>
                     <div className="flex items-center mb-4">
-                      <input type="radio" name="class-1-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                      <input onClick={laterPay3} type="radio" name="class-3-pay" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                       <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Later</label>
                     </div>
                   </div>

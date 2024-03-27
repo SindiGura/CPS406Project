@@ -15,60 +15,92 @@ app.listen(PORT, () => {
     (error, row) => {
         error ? console.log(error) : console.log(row);
     })
-})
-app.post("/delete-from-classes", (req, res) => {
-    database.all("delete from class1")
-    database.all("delete from class2")
-    database.all("delete from class3")
+    database.all("select * from class1",
+    (error, row) => {
+        error ? console.log(error) : console.log(row);
+    })
+    database.all("select * from class2",
+    (error, row) => {
+        error ? console.log(error) : console.log(row);
+    })
+    database.all("select * from class3",
+    (error, row) => {
+        error ? console.log(error) : console.log(row);
+    })
 })
 
 app.post("/submit-classes", (req, res) => {
-    //database.all("delete from class1")
-    //database.all("delete from class2")
-    //database.all("delete from class3")
-    if(req.body.class1 === "1"){
+    if(req.body.class1 === "1" || req.body.class1pay === "1"){
+        database.all("delete from class1 where member = $email",
+        {
+            $email: req.body.member
+        }, (error) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                database.all("insert into class1 (member, paid) values ($member, $paid)",
+                {
+                    $member: req.body.member,
+                    $paid: parseInt(req.body.class1pay)
+                }, (error) => {
+                    if(error) {
+                        res.status(500);
+                    }
+                    else {
+                    }
+                })
+            }
+        })
+    }
+    if(req.body.class2 === "1" || req.body.class2pay === "1"){
+        database.all("delete from class2 where member = $email",
+        {
+            $email: req.body.member
+        }, (error) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                database.all("insert into class2 (member, paid) values ($member, $paid)",
+                {
+                    $member: req.body.member,
+                    $paid: parseInt(req.body.class2pay)
+                }, (error) => {
+                    if(error) {
+                        res.status(500);
+                    }
+                    else {
+                    }
+                })
+            }
+        })
         
-        database.all("insert into class1 (member, paid) values ($member, $paid)",
-        {
-            $member: req.body.member,
-            $paid : 0
-        }, (error) => {
-            if(error) {
-                res.status(500);
-            }
-            else {
-            }
-        })
     }
-    if(req.body.class2 === "1"){
-        console.log("hello")
-        database.all("insert into class2 (member, paid) values ($member, $paid)",
+    if(req.body.class3 === "1" || req.body.class3pay === "1"){
+        database.all("delete from class3 where member = $email",
         {
-            $member: req.body.member,
-            $paid : 0
+            $email: req.body.email
         }, (error) => {
             if(error) {
-                res.status(500);
+                res.sendStatus(500);
             }
             else {
-            }
-        })
-    }
-    if(req.body.class3 === "1"){  
-        database.all("insert into class3 (member, paid) values ($member, $paid)",
-        {
-            $member: req.body.member,
-            $paid : 0
-        }, (error) => {
-            if(error) {
-                res.status(500);
-            }
-            else {
+                database.all("insert into class3 (member, paid) values ($member, $paid)",
+                {
+                    $member: req.body.member,
+                    $paid: parseInt(req.body.class3pay)
+                }, (error) => {
+                    if(error) {
+                        res.status(500);
+                    }
+                    else {
+                    }
+                })
             }
         })
     }
 })
-
 
 app.post("/create-account", (req, res) => {
     database.all("select email from members where email = $email",
@@ -159,7 +191,7 @@ app.post("/members/:num", (req, res) => {
 
 app.get("/class/:num", (req, res) => {
     if(req.params.num === "1") {
-        database.all("select * from members",
+        database.all("select name, phone, address, paid from class1 inner join members on members.email = class1.member",
         (error, row) => {
             if(error) {
                 res.sendStatus(500);
@@ -170,7 +202,7 @@ app.get("/class/:num", (req, res) => {
         })
     }
     else if(req.params.num === "2") {
-        database.all("select * from members",
+        database.all("select name, phone, address, paid from class2 inner join members on members.email = class2.member",
         (error, row) => {
             if(error) {
                 res.sendStatus(500);
@@ -181,7 +213,7 @@ app.get("/class/:num", (req, res) => {
         })
     }
     else if(req.params.num === "3") {
-        database.all("select * from members",
+        database.all("select name, phone, address, paid from class3 inner join members on members.email = class3.member",
         (error, row) => {
             if(error) {
                 res.sendStatus(500);

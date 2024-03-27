@@ -50,7 +50,7 @@ function ClassesPage() {
         {member.address}
       </td>
       <td class="px-6 py-4">
-        No
+        {member.paid === 0 ? "No" : "Yes"}
       </td>
     </tr>
   );
@@ -66,7 +66,7 @@ function ClassesPage() {
         {member.address}
       </td>
       <td class="px-6 py-4">
-        No
+        {member.paid === 0 ? "No" : "Yes"}
       </td>
     </tr>
   );
@@ -82,7 +82,7 @@ function ClassesPage() {
         {member.address}
       </td>
       <td class="px-6 py-4">
-        No
+        {member.paid === 0 ? "No" : "Yes"}
       </td>
     </tr>
   );
