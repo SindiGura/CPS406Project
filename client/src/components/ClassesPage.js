@@ -5,38 +5,76 @@ function ClassesPage() {
   const [class1, setClass1] = useState([])
   const [class2, setClass2] = useState([])
   const [class3, setClass3] = useState([])
+  const [order, setOrder] = useState(0)
 
   useEffect(() => {
-    fetch("http://localhost:5000/class/1").then((response) => {
-      if(response.ok) {
-        return response.json();
-      }
-    }).then((data) => {
-      setClass1(data.row)
-    }).catch((error) => {
-      console.log(error);
-    })
+    if(order === 0) {
+      fetch("http://localhost:5000/class/1").then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        setClass1(data.row)
+      }).catch((error) => {
+        console.log(error);
+      })
+  
+      fetch("http://localhost:5000/class/2").then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        setClass2(data.row)
+      }).catch((error) => {
+        console.log(error);
+      })
+  
+      fetch("http://localhost:5000/class/3").then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        setClass3(data.row)
+      }).catch((error) => {
+        console.log(error);
+      })
+    }
+    else {
+      fetch("http://localhost:5000/class/order/1").then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        setClass1(data.row)
+      }).catch((error) => {
+        console.log(error);
+      })
+  
+      fetch("http://localhost:5000/class/order/2").then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        setClass2(data.row)
+      }).catch((error) => {
+        console.log(error);
+      })
+  
+      fetch("http://localhost:5000/class/order/3").then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+      }).then((data) => {
+        setClass3(data.row)
+      }).catch((error) => {
+        console.log(error);
+      })
+    }
+  }, [order])
 
-    fetch("http://localhost:5000/class/2").then((response) => {
-      if(response.ok) {
-        return response.json();
-      }
-    }).then((data) => {
-      setClass2(data.row)
-    }).catch((error) => {
-      console.log(error);
-    })
-
-    fetch("http://localhost:5000/class/3").then((response) => {
-      if(response.ok) {
-        return response.json();
-      }
-    }).then((data) => {
-      setClass3(data.row)
-    }).catch((error) => {
-      console.log(error);
-    })
-  })
+  function changeOrder() {
+    setOrder(order === 0 ? 1 : 0);
+  }
 
   const class1Members = class1.map((member) => 
     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -89,6 +127,11 @@ function ClassesPage() {
 
   return (
     <div>
+      <div>
+        <button onClick={changeOrder} className="items-center justify-center w-1/5 px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black" type="submit">
+          Sort
+        </button>
+      </div>
       <h1 class="text-gray-900 uppercase text-2xl font-bold my-2 ml-4">Class 1</h1>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

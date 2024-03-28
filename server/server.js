@@ -227,3 +227,42 @@ app.get("/class/:num", (req, res) => {
         res.sendStatus(500);
     }
 })
+
+app.get("/class/order/:num", (req, res) => {
+    if(req.params.num === "1") {
+        database.all("select name, phone, address, paid from class1 inner join members on members.email = class1.member order by paid",
+        (error, row) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                res.status(200).json({row: row});
+            }
+        })
+    }
+    else if(req.params.num === "2") {
+        database.all("select name, phone, address, paid from class2 inner join members on members.email = class2.member order by paid",
+        (error, row) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                res.status(200).json({row: row});
+            }
+        })
+    }
+    else if(req.params.num === "3") {
+        database.all("select name, phone, address, paid from class3 inner join members on members.email = class3.member order by paid",
+        (error, row) => {
+            if(error) {
+                res.sendStatus(500);
+            }
+            else {
+                res.status(200).json({row: row});
+            }
+        })
+    }
+    else {
+        res.sendStatus(500);
+    }
+})
