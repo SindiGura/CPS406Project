@@ -189,6 +189,11 @@ app.post("/members/:num", (req, res) => {
     }
 })
 
+app.post("/submit-pay",(req, res) => {
+    
+
+})
+
 app.get("/class/:num", (req, res) => {
     if(req.params.num === "1") {
         database.all("select name, phone, address, paid from class1 inner join members on members.email = class1.member",

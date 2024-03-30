@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-function Payment({email,visible,onClose}) {   
+function Payment({email,visible,onClose,class1,class2,class3}) {   
   const [cardNum, setCardNum ] = useState("");
   const [cardName, setCardName] = useState("");
   const [date, setDate] = useState("");
@@ -12,20 +12,21 @@ function Payment({email,visible,onClose}) {
 
   async function handleSubmit(e) {
     e.preventDefault(); 
-    if(!cardNum)
-      console.error("Missing credit card number")
-    else if (!cardName)
-      console.error("Missing credit card holder")
-    else if (!date)
-      console.error("Missing expiry date")
-    else if (!threeDigit)
+    if(!cardNum || cardNum.length < 19)
+      console.error("Invalid credit card number")
+    if (!cardName)
+      console.error("Inavlid credit card holder")
+    if (!date)
+      console.error("Inavlid expiry date")
+    if (!threeDigit || threeDigit.length < 3)
       console.error("Please provide the three digits on the back of your card")
-    else {//get server response and post info
-      fetch("", {
+    if (cardNum.length === 19 && cardName && date && threeDigit.length === 3) {//get server response and post info
+      console.log("meow")
+      fetch("http://localhost:5000/submit-pay", {
         method: "POST",
         mode: "cors",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({})
+        body: JSON.stringify({"member" : `${email}`, "class1" : `${class1}`, "class2" : `${class2}`, "class3" : `${class3}`})
       }).then((response) => {
         if(response.ok) {
           window.location.href=(`/login`)
@@ -35,6 +36,14 @@ function Payment({email,visible,onClose}) {
       })
     }
   }
+  //i may not have made this XD --SP
+  const handleChange = (event) => {
+    const inputValue = event.target.value;
+    const sanitizedValue = inputValue
+      .replace(/\s/g, '') // Remove any existing spaces
+      .replace(/(\d{4})/g, '$1 ').trim(); // Insert spaces every 4 digits
+    setCardNum(sanitizedValue);
+  };
 
   const handleClose = (e) => {
     if(e.target.id === 'container') onClose();
@@ -60,8 +69,9 @@ function Payment({email,visible,onClose}) {
                     </label>
                     <input
                     value={cardNum}
-                    onChange={(e) => setCardNum(e.target.value)}
+                    onChange={handleChange}
                     type="cardNum"
+                    maxLength="19"
                     className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                     placeholder="0000 0000 0000 0000"
                     autoComplete="off"
@@ -76,7 +86,7 @@ function Payment({email,visible,onClose}) {
                     onChange={(e) => setCardName(e.target.value)}
                     type="cardName"
                     className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                    placeholder=""
+                    placeholder="Hugo Lui"
                     autoComplete="off"
                     />
                 </div>
@@ -87,7 +97,7 @@ function Payment({email,visible,onClose}) {
                     <input
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    type="date"
+                    type="month"
                     className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                     placeholder="MM/YY"
                     autoComplete="off"
@@ -101,6 +111,7 @@ function Payment({email,visible,onClose}) {
                     value={threeDigit}
                     onChange={(e) => setThreeDigit(e.target.value)}
                     type="threeDigit"
+                    maxLength="3"
                     className="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                     placeholder="123"
                     autoComplete="off"

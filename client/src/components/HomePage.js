@@ -325,7 +325,8 @@ function HomePage() {
       </div>
       <div className=''>
           
-          <div className='absolute'><><button className='text-xl absolute'>x</button><Payment onClose={onClosePayment} visible={payment}/></> </div>
+          <div className='absolute'><><button className='text-xl absolute'>x</button><Payment email={email} 
+          onClose={onClosePayment} visible={payment} class1={aClass1Pay} class2={aClass2Pay} class3={aClass3Pay}/></> </div>
         </div>
     </section>
   );
