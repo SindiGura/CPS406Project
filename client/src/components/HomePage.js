@@ -1,12 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
+import Payment from './Payment';
 
 function HomePage() {
 
   const {state} = useLocation();
   const {email, name} = state;
   const navigate = useNavigate();
+  const [dropDown, setDropDown] = useState(false);
+  const [payment, showPayment] = useState(false);
 
   const [aClass1, setAClass1] = useState(0);
   const [aClass2, setAClass2] = useState(0);
@@ -20,6 +23,8 @@ function HomePage() {
   const [class2Pay, setClass2Pay] = useState("Would you like to pay now or later?");
   const [class3, setClass3] = useState("You are not currently attending Class 3, would you like to join?");
   const [class3Pay, setClass3Pay] = useState("Would you like to pay now or later?");
+
+  const onClosePayment = () => showPayment(false)
 
   async function handleSubmit(e) {
     fetch("http://localhost:5000/submit-classes", {
@@ -192,12 +197,26 @@ function HomePage() {
   
   return (
     <section>
+      <div className='flex justify-center'>
+        <div className="grid grid-rows-4 pt-24 w-1/4 "
+        onMouseEnter={() => setDropDown(true)}
+        onMouseLeave={() => setDropDown(false)}>
+          <div>
+            <h2 className="text-4xl text-black text-center ">Welcome, {name}</h2>
+          </div>
+          {dropDown ? (<>
+            <button className='hover:bg-gray-200 hover:rounded-xl ' onClick={()=> navigate("/")}
+            >Logout</button>
+            <button className='hover:bg-gray-200 hover:rounded-xl
+            ' onClick={()=> navigate("/classes")}
+            >Classes</button>
+            <button className='hover:bg-gray-200 hover:rounded-xl' onClick={()=>showPayment(true)}>Add Payment</button></>) : null}
+        </div>
+      </div>
+
       <div className="relative items-center w-full px-5 py-40 mx-auto md:px-12 lg:px-20 max-w-7xl">
         <div className="w-full max-w-md mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4">
           <div className="flex flex-col">
-            <div>
-              <h2 className="text-4xl text-black text-center">Welcome, {name}</h2>
-            </div>
           </div>
           <form>
             <div className="mt-4 space-y-6">
@@ -304,6 +323,10 @@ function HomePage() {
           </form>
         </div>
       </div>
+      <div className=''>
+          
+          <div className='absolute'><><button className='text-xl absolute'>x</button><Payment onClose={onClosePayment} visible={payment}/></> </div>
+        </div>
     </section>
   );
 }
