@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import Payment from './Payment';
 
-function HomePage() {
+function HomePage({email,name}) {
 
   const {state} = useLocation();
-  const {email, name} = state;
   const navigate = useNavigate();
   const [dropDown, setDropDown] = useState(false);
   const [payment, showPayment] = useState(false);

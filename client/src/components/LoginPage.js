@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 
-function LoginPage() {
+function LoginPage({setUser}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -24,7 +24,8 @@ function LoginPage() {
           return response.json();
         }
       }).then((data) => {
-        navigate("/home", {state: {email: data.row[0].email, name: data.row[0].name}});
+        setUser(data.row[0].email, data.row[0].name)
+        navigate("/home");
       }).catch((error) => {
         console.log(error);
       })
