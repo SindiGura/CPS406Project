@@ -4,11 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Payment from './Payment';
 
 function HomePage({email,name}) {
-
-  const {state} = useLocation();
   const navigate = useNavigate();
   const [dropDown, setDropDown] = useState(false);
   const [payment, showPayment] = useState(false);
+  const [paymentState, setPaymentState] = useState(false);
 
   const [aClass1, setAClass1] = useState(0);
   const [aClass2, setAClass2] = useState(0);
@@ -24,21 +23,47 @@ function HomePage({email,name}) {
   const [class3Pay, setClass3Pay] = useState("Would you like to pay now or later?");
 
   const onClosePayment = () => showPayment(false)
+  const onSubmitPayment = () => setPaymentState(true);
 
+  useEffect(()=>{
+    console.log(payment)
+  },[payment])
+  
   async function handleSubmit(e) {
-    fetch("http://localhost:5000/submit-classes", {
-      method: "POST",
-      mode: "cors",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`, "class1pay" : `${aClass1Pay}`, "class2pay" : `${aClass2Pay}`, "class3pay" : `${aClass3Pay}` })
-    }).then((response)=>{
-      if(response.ok){
-        navigate("/home");
-        console.log("WORKED");
-      }
-    }).catch((error)=>{
-      console.log(error);
-    })
+    e.preventDefault()
+    if(!paymentState) {
+      showPayment(true) 
+    }
+    else{
+      fetch("http://localhost:5000/submit-classes", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`, "class1pay" : `${aClass1Pay}`, "class2pay" : `${aClass2Pay}`, "class3pay" : `${aClass3Pay}` })
+      }).then((response)=>{
+        if(response.ok){
+          
+          console.log("WORKED");
+        }
+      }).catch((error)=>{
+        console.log(error);
+      })
+    }
+    if(!payment){
+      fetch("http://localhost:5000/submit-classes", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`, "class1pay" : `${aClass1Pay}`, "class2pay" : `${aClass2Pay}`, "class3pay" : `${aClass3Pay}` })
+      }).then((response)=>{
+        if(response.ok){
+          
+          console.log("WORKED");
+        }
+      }).catch((error)=>{
+        console.log(error);
+      })
+    }
   }
 
   useEffect(() => {
@@ -313,7 +338,7 @@ function HomePage({email,name}) {
                 <button
                   className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={(e)=> handleSubmit(e)}
                 >
                   Submit
                 </button>
@@ -325,7 +350,7 @@ function HomePage({email,name}) {
       <div className=''>
           
           <div className='absolute'><><button className='text-xl absolute'>x</button><Payment email={email} 
-          onClose={onClosePayment} visible={payment} class1={aClass1Pay} class2={aClass2Pay} class3={aClass3Pay}/></> </div>
+          onClose={onClosePayment} paymentState={onSubmitPayment} visible={payment}/></> </div>
         </div>
     </section>
   );

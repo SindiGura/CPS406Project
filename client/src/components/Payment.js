@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-function Payment({email,visible,onClose,class1,class2,class3}) {   
+function Payment({visible,onClose,paymentState}) {   
   const [cardNum, setCardNum ] = useState("");
   const [cardName, setCardName] = useState("");
   const [date, setDate] = useState("");
@@ -21,19 +20,8 @@ function Payment({email,visible,onClose,class1,class2,class3}) {
     if (!threeDigit || threeDigit.length < 3)
       console.error("Please provide the three digits on the back of your card")
     if (cardNum.length === 19 && cardName && date && threeDigit.length === 3) {//get server response and post info
-      console.log("meow")
-      fetch("http://localhost:5000/submit-pay", {
-        method: "POST",
-        mode: "cors",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({"member" : `${email}`, "class1" : `${class1}`, "class2" : `${class2}`, "class3" : `${class3}`})
-      }).then((response) => {
-        if(response.ok) {
-          window.location.href=(`/login`)
-        }
-      }).catch((error) => {
-        console.log(error);
-      })
+      paymentState();
+      onClose()
     }
   }
   //i may not have made this XD --SP
