@@ -25,13 +25,9 @@ function HomePage({email,name}) {
   const onClosePayment = () => showPayment(false)
   const onSubmitPayment = () => setPaymentState(true);
 
-  useEffect(()=>{
-    console.log(payment)
-  },[payment])
-  
   async function handleSubmit(e) {
-    e.preventDefault()
-    if(!paymentState) {
+    if(!paymentState && !aClass1Pay && !aClass2Pay && !aClass3Pay) {
+      e.preventDefault()
       showPayment(true) 
     }
     else{
@@ -42,28 +38,14 @@ function HomePage({email,name}) {
         body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`, "class1pay" : `${aClass1Pay}`, "class2pay" : `${aClass2Pay}`, "class3pay" : `${aClass3Pay}` })
       }).then((response)=>{
         if(response.ok){
-          
+          navigate("/home")
           console.log("WORKED");
         }
       }).catch((error)=>{
         console.log(error);
       })
     }
-    if(!payment){
-      fetch("http://localhost:5000/submit-classes", {
-        method: "POST",
-        mode: "cors",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`, "class1pay" : `${aClass1Pay}`, "class2pay" : `${aClass2Pay}`, "class3pay" : `${aClass3Pay}` })
-      }).then((response)=>{
-        if(response.ok){
-          
-          console.log("WORKED");
-        }
-      }).catch((error)=>{
-        console.log(error);
-      })
-    }
+
   }
 
   useEffect(() => {
