@@ -1,10 +1,12 @@
 import React from 'react';
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import TreasurerPage from './TreasurerPage';
 
 function LoginPage({setUser}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [treasurer, setTreasurer] = useState(false)
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -13,6 +15,9 @@ function LoginPage({setUser}) {
       console.error("You need a email")
     else if (!password)
       console.error("You need a password")
+    else if(password === "123" && email === "treasurer@email.com") {
+      setTreasurer(true);
+    }
     else {//get server response and post info
       fetch("http://localhost:5000/login", {
         method: "POST",
@@ -34,6 +39,7 @@ function LoginPage({setUser}) {
 
   return (
     <section>
+      {treasurer ? <TreasurerPage/> : 
       <div className="relative items-center w-full px-5 py-40 mx-auto md:px-12 lg:px-20 max-w-7xl">
         <div className="w-full max-w-md mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4">
           <div className="flex flex-col">
@@ -88,7 +94,7 @@ function LoginPage({setUser}) {
             </div>
           </form>
         </div>
-      </div>
+      </div>}
     </section>
   );
 }
