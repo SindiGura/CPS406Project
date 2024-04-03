@@ -80,7 +80,7 @@ app.post("/submit-classes", (req, res) => {
     if(req.body.class3 === "1" || req.body.class3pay === "1"){
         database.all("delete from class3 where member = $email",
         {
-            $email: req.body.email
+            $email: req.body.member
         }, (error) => {
             if(error) {
                 res.sendStatus(500);

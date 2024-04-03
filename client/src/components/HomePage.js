@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Payment from './Payment';
 
 function HomePage({email,name}) {
@@ -8,6 +8,7 @@ function HomePage({email,name}) {
   const [dropDown, setDropDown] = useState(false);
   const [payment, showPayment] = useState(false);
   const [paymentState, setPaymentState] = useState(false);
+  const [total, setTotal] = useState(0);
 
   const [aClass1, setAClass1] = useState(0);
   const [aClass2, setAClass2] = useState(0);
@@ -45,8 +46,22 @@ function HomePage({email,name}) {
         console.log(error);
       })
     }
-
   }
+
+  useEffect(() => {
+    let temp = 0;
+    if(!document.getElementById("class-1-pay-a").classList.contains("hidden")) {
+      temp += 100 * aClass1 * aClass1Pay
+    }
+    if(!document.getElementById("class-2-pay-a").classList.contains("hidden")) {
+      temp += 100 * aClass2 * aClass2Pay
+    }
+    if(!document.getElementById("class-3-pay-a").classList.contains("hidden")) {
+      temp += 100 * aClass3 * aClass3Pay
+    }
+    let discount = 1 - (0.05 * aClass1 + 0.05 * aClass2 + 0.05 * aClass3 + 0.05 * aClass1Pay + 0.05 * aClass2Pay + 0.05 * aClass3Pay);
+    setTotal(temp * discount);
+  }, [aClass1, aClass1Pay, aClass2, aClass2Pay, aClass3, aClass3Pay])
 
   useEffect(() => {
     fetch("http://localhost:5000/members/1", {
@@ -64,6 +79,7 @@ function HomePage({email,name}) {
         }
         else {
           setClass1("You have signed up for Class 1!");
+          setAClass1(1)
           document.getElementById("class-1-a").classList.add("hidden");
           if(data.row[0].paid === 1) {
             setClass1Pay("You have paid for Class 1.");
@@ -93,6 +109,7 @@ function HomePage({email,name}) {
           setClass2("You are not currently attending Class 2, would you like to join?");
         }
         else {
+          setAClass2(1)
           setClass2("You have signed up for Class 2!");
           document.getElementById("class-2-a").classList.add("hidden");
           if(data.row[0].paid === 1) {
@@ -123,6 +140,7 @@ function HomePage({email,name}) {
           setClass3("You are not currently attending Class 3, would you like to join?");
         }
         else {
+          setAClass3(1)
           setClass3("You have signed up for Class 3!");
           document.getElementById("class-3-a").classList.add("hidden");
           if(data.row[0].paid === 1) {
@@ -315,6 +333,9 @@ function HomePage({email,name}) {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="col-span-full block mb-3 text-md font-medium text-gray-600">
+                {`You will be charged ${total}`}
               </div>
               <div className="col-span-full">
                 <button
