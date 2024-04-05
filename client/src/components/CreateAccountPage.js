@@ -9,6 +9,13 @@ function CreateAccountPage() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
+  const [coach, setCoach] = useState("");
+
+  const [checked, setChecked] = React.useState(false);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
 
   async function handleSubmit(e) {
     e.preventDefault(); 
@@ -27,7 +34,7 @@ function CreateAccountPage() {
         method: "POST",
         mode: "cors",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}`, "name" : `${name}`, "address" : `${address}`, "phone" : `${phone}` })
+        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}`, "name" : `${name}`, "address" : `${address}`, "phone" : `${phone}`, "isCoach" : `${coach}`})
       }).then((response) => {
         if(response.ok) {
           window.location.href=(`/login`)
@@ -114,7 +121,14 @@ function CreateAccountPage() {
                   autoComplete="off"
                 />
               </div>
-
+              <label>
+              <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={handleChange}
+                />
+                  I am a coach
+              </label>
               <div className="col-span-full">
                 <button
                   className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"

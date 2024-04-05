@@ -27,6 +27,10 @@ app.listen(PORT, () => {
     (error, row) => {
         error ? console.log(error) : console.log(row);
     })
+    database.all("select * from coaches",
+    (error,row)=>{
+        error ? console.log(error) : console.log(row);
+    })
 })
 
 app.post("/submit-classes", (req, res) => {
@@ -103,45 +107,89 @@ app.post("/submit-classes", (req, res) => {
 })
 
 app.post("/create-account", (req, res) => {
-    database.all("select email from members where email = $email",
-    {
-        $email: req.body.email
-    }, (error, row) => {
-        if(row.length !== 0) {
-            res.sendStatus(500);
-        }
-        else {
-            database.all("insert into members (email, password, name, address, phone) values ($email, $password, $name, $address, $phone)",
-            {
-                $email: req.body.email,
-                $password: req.body.password,
-                $name: req.body.name,
-                $address: req.body.address,
-                $phone: req.body.phone
-            }, (error) => {
-                if(error) {
-                    res.sendStatus(500);
-                }
-                else {
-                    res.sendStatus(200);
-                }
-            })
-        }
-    })
+    if (req.body.isCoach === "false"){
+        database.all("select email from members where email = $email",
+        {
+            $email: req.body.email
+        }, (error, row) => {
+            if(row.length !== 0) {
+                res.sendStatus(500);
+            }
+            else {
+                database.all("insert into members (email, password, name, address, phone) values ($email, $password, $name, $address, $phone)",
+                {
+                    $email: req.body.email,
+                    $password: req.body.password,
+                    $name: req.body.name,
+                    $address: req.body.address,
+                    $phone: req.body.phone
+                }, (error) => {
+                    if(error) {
+                        res.sendStatus(500);
+                    }
+                    else {
+                        res.sendStatus(200);
+                    }
+                })
+            }
+        })
+    }
+    else{
+        database.all("select email from coaches where email = $email",
+        {
+            $email: req.body.email
+        }, (error, row) => {
+            if(row.length !== 0) {
+                res.sendStatus(500);
+            }
+            else {
+                database.all("insert into coaches (email, password, name, address, phone) values ($email, $password, $name, $address, $phone)",
+                {
+                    $email: req.body.email,
+                    $password: req.body.password,
+                    $name: req.body.name,
+                    $address: req.body.address,
+                    $phone: req.body.phone
+                }, (error) => {
+                    if(error) {
+                        res.sendStatus(500);
+                    }
+                    else {
+                        res.sendStatus(200);
+                    }
+                })
+            }
+        })
+    }
 })
 
 app.post("/login", (req, res) => {
-    database.all("select * from members where email = $email",
-    {
-        $email: req.body.email
-    }, (error, row) => {
-        if(row.length !== 0 && row[0].password === req.body.password) {
-            res.status(200).json({row: row});
-        }
-        else {
-            res.sendStatus(500);
-        }
-    })
+    if(!req.body.isCoach){
+        database.all("select * from members where email = $email",
+        {
+            $email: req.body.email
+        }, (error, row) => {
+            if(row.length !== 0 && row[0].password === req.body.password) {
+                res.status(200).json({row: row});
+            }
+            else {
+                res.sendStatus(500);
+            }
+        })
+    }
+    else{
+        database.all("select * from coaches where email = $email",
+        {
+            $email: req.body.email
+        }, (error, row) => {
+            if(row.length !== 0 && row[0].password === req.body.password) {
+                res.status(200).json({row: row});
+            }
+            else {
+                res.sendStatus(500);
+            }
+        })
+    }
 })
 
 app.post("/members/:num", (req, res) => {

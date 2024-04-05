@@ -7,7 +7,14 @@ function LoginPage({setUser}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [treasurer, setTreasurer] = useState(false)
+  const [coach, setCoach] = useState(false);
   const navigate = useNavigate();
+
+  const [checked, setChecked] = React.useState(false);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
 
   async function handleSubmit(e) {
     e.preventDefault(); 
@@ -23,7 +30,7 @@ function LoginPage({setUser}) {
         method: "POST",
         mode: "cors",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}` })
+        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}` , "isCoach" : `${coach}`})
       }).then((response) => {
         if(response.ok) {
           return response.json();
@@ -74,6 +81,14 @@ function LoginPage({setUser}) {
                   type="password"
                 />
               </div>
+              <label>
+              <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={handleChange}
+                />
+                  I am a coach
+              </label>
 
               <div className="col-span-full">
                 <button

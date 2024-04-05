@@ -8,6 +8,13 @@ function createMembersTable() {
     });
 }
 
+function createCoachesTable(){
+    database.serialize(() => {
+        database.run("drop table if exists coaches");
+        database.run("create table coaches (email TEXT, password TEXT, name TEXT, address TEXT, phone TEXT, classes TEXT)");
+    });
+}
+
 function createClassTables() {
     database.serialize(() => {
         database.run("drop table if exists class1")
