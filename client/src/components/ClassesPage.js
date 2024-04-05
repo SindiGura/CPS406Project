@@ -2,10 +2,10 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 
 function ClassesPage() {
-  const [class1, setClass1] = useState([])
-  const [class2, setClass2] = useState([])
-  const [class3, setClass3] = useState([])
-  const [order, setOrder] = useState(0)
+  const [class1, setClass1] = useState([]);
+  const [class2, setClass2] = useState([]);
+  const [class3, setClass3] = useState([]);
+  const [order, setOrder] = useState(0);
 
   useEffect(() => {
     if(order === 0) {

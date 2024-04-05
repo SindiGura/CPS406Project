@@ -25,3 +25,17 @@ function createClassTables() {
         database.run("create table class3 (member TEXT, paid INTEGER)")
     });
 }
+
+function createRevenueTable() {
+    database.serialize(() => {
+        database.run("drop table if exists revenue")
+        database.run("create table revenue (name TEXT, amount INTEGER)")
+    });
+}
+
+function createDebtTable() {
+    database.serialize(() => {
+        database.run("drop table if exists debt")
+        database.run("create table debt (name TEXT, amount INTEGER)")
+    });
+}

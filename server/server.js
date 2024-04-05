@@ -107,7 +107,7 @@ app.post("/submit-classes", (req, res) => {
 })
 
 app.post("/create-account", (req, res) => {
-    if (req.body.isCoach === "false"){
+    if(req.body.isCoach === "false") {
         database.all("select email from members where email = $email",
         {
             $email: req.body.email
@@ -134,7 +134,7 @@ app.post("/create-account", (req, res) => {
             }
         })
     }
-    else{
+    else {
         database.all("select email from coaches where email = $email",
         {
             $email: req.body.email
@@ -313,4 +313,43 @@ app.get("/class/order/:num", (req, res) => {
     else {
         res.sendStatus(500);
     }
+})
+
+app.get("/debt", (req, res) => {
+    database.all("select * from debt",
+    (error, row) => {
+        if(error) {
+            res.sendStatus(500);
+        }
+        else {
+            res.status(200).json({row: row});
+        }
+    })
+})
+
+app.get("/revenue", (req, res) => {
+    database.all("select * from revenue",
+    (error, row) => {
+        if(error) {
+            res.sendStatus(500);
+        }
+        else {
+            res.status(200).json({row: row});
+        }
+    })
+})
+
+app.post("/revenue", (req, res) => {
+    database.all("insert into revenue (name, amount) values ($name, $amount)",
+    {
+        $name: req.body.name,
+        $amount: parseInt(req.body.amount)
+    }, (error) => {
+        if(error) {
+            res.sendStatus(500);
+        }
+        else {
+            res.sendStatus(200);
+        }
+    })
 })

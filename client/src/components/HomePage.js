@@ -32,6 +32,19 @@ function HomePage({email,name}) {
       showPayment(true) 
     }
     else{
+      fetch("http://localhost:5000/revenue", {
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "name" : `${email}`, "amount" : `${total}` })
+      }).then((response)=>{
+        if(response.ok){
+          console.log("WORKED");
+        }
+      }).catch((error)=>{
+        console.log(error);
+      })
+
       fetch("http://localhost:5000/submit-classes", {
         method: "POST",
         mode: "cors",
