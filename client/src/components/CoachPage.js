@@ -6,6 +6,24 @@ import ClassesPage from './ClassesPage';
 function CoachPage({email, name}) {
   const [dropDown, setDropDown] = useState(false);
   const navigate = useNavigate();
+  const [yourClasses, setClasses] = useState();
+  useEffect(()=>{
+    fetch("http://localhost:5000/get-coaches-name",{
+        method: "POST",
+        mode: "cors",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({"name" : `${name}`})
+    }).then((response)=>{
+        if(response.ok){
+          return response.json();
+        }
+      }).then((data)=>{
+        setClasses(data.row[0]["classes"]);
+        console.log(yourClasses)
+      }).catch((error)=>{
+        console.log(error)
+      })
+  },[])
 
   return (
     <section>
@@ -23,7 +41,7 @@ function CoachPage({email, name}) {
             </div>
         </div>
         <div className='flex justify-center'>
-            <div className='text-4xl'>Your Classes</div>
+            <div className='text-4xl'>{yourClasses ? "You are teaching Class"+yourClasses : "You are not teaching any classes."}</div>
         </div>
         <div className='flex justify-center'>
             <div className='w-1/2 pt-10'>

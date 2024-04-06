@@ -33,6 +33,33 @@ app.listen(PORT, () => {
     })
 })
 
+app.post("/update-coach-classes",(req,res)=>{
+    database.all("UPDATE COACHES SET classes = $class WHERE name = $name",{
+        $class : req.body.class,
+        $name : req.body.name
+    },(error)=>{
+        if(error)
+            res.sendStatus(500);
+        else
+            res.sendStatus(200);
+    })
+})
+app.post("/get-class-coaches", (req, res) => {
+    database.all("SELECT * FROM coaches WHERE classes = $class", {
+        $class: req.body.class
+    }, (error, row) => {
+        if (error) {
+            res.sendStatus(500);
+        } else {
+            if (row.length != 0) {
+                res.status(200).json({ row: row });
+            } else {
+                res.status(200).json({ row: [] });
+            }
+        }
+    });
+});
+
 
 app.post("/submit-classes", (req, res) => {
     if(req.body.class1 === "1" || req.body.class1pay === "1"){
@@ -192,7 +219,6 @@ app.post("/login", (req, res) => {
         })
     }
 })
-
 app.post("/members/:num", (req, res) => {
     if(req.params.num === "1") {
         database.all("select * from class1 where member = $email",
@@ -348,6 +374,22 @@ app.get("/class/order/:num", (req, res) => {
 
 app.get("/debt", (req, res) => {
     database.all("select * from debt",
+    (error, row) => {
+        if(error) {
+            res.sendStatus(500);
+        }
+        else {
+            res.status(200).json({row: row});
+        }
+    })
+})
+
+
+
+app.post("/get-coaches-name", (req, res) => {
+    database.all("select * from coaches where name = $name",{
+        $name : req.body.name
+    },
     (error, row) => {
         if(error) {
             res.sendStatus(500);

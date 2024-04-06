@@ -73,15 +73,40 @@ function TreasurerPage() {
       {member.phone}
     </td>
     <td class="px-6 py-4">
+      {member.email}
+    </td>
+    <td class="px-6 py-4">
       {member.address}
     </td>
     <td class="px-6 py-4">
-      {member.class}
-
+      <form onSubmit={(e)=>{handleSubmit(e,member.name)}}>
+        <label className="px-4"><input  type="radio" name="class" value="" defaultChecked={member.classes==="" ? true : false}/>No Class</label>
+        <label className="px-4"><input  type="radio" name="class" value="1" defaultChecked={member.classes==="1" ? true : false}/> Class 1</label>
+        <label className="px-4"><input  type="radio" name="class" value="2" defaultChecked={member.classes==="2" ? true : false} />Class 2</label>
+        <label className="px-4"><input  type="radio" name="class" value="3" defaultChecked={member.classes==="3" ? true : false}/>Class 3</label>
+        <button className="px-2" type="submit">Submit form</button>
+      </form>
     </td>
   </tr>
 );
+  function handleSubmit(e,name){
+    const form = e.target;
+    const formData = new FormData(form);
+    const formJson = Object.fromEntries(formData.entries());
+    const c = formJson["class"];
 
+    fetch("http://localhost:5000/update-coach-classes",{
+      method: "POST",
+      mode: "cors",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ "class" : `${c}`, "name" : `${name}`})
+    }).then((response)=>{
+      navigate("/treasurer")
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }
   const totalRevenueList = revenue.map(a => a.amount)
   const totalRevenue = totalRevenueList.reduce((sum, a) => sum + a, 0);
   const totalDebtList = debt.map(a => a.amount)
@@ -156,6 +181,9 @@ function TreasurerPage() {
               </th>
               <th scope="col" class="px-6 py-3">
                   Phone Number
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Email
               </th>
               <th scope="col" class="px-6 py-3">
                   Address

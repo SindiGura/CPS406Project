@@ -5,6 +5,9 @@ import {useNavigate} from 'react-router-dom'
 function ClassesPage({email, name, isCoach, setUser}) {
   const navigate = useNavigate();
   const [class1, setClass1] = useState([]);
+  const [c1Coaches, setc1Coaches] = useState([]);
+  const [c2Coaches, setc2Coaches] = useState([]);
+  const [c3Coaches, setc3Coaches] = useState([]);
   const [class2, setClass2] = useState([]);
   const [class3, setClass3] = useState([]);
   const [order, setOrder] = useState(0);
@@ -13,6 +16,48 @@ function ClassesPage({email, name, isCoach, setUser}) {
   const [remove3, setRemove3] = useState(false);
 
   useEffect(() => {
+    fetch("http://localhost:5000/get-class-coaches",{
+      method: "POST",
+      mode: "cors",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ "class" : "1"})
+    }).then((response) => {
+      if(response.ok) {
+        return response.json();
+      }
+    }).then((data) => {
+      setc1Coaches(data.row)
+    }).catch((error) => {
+      console.log(error);
+    })
+    fetch("http://localhost:5000/get-class-coaches",{
+      method: "POST",
+      mode: "cors",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ "class" : "2"})
+    }).then((response) => {
+      if(response.ok) {
+        return response.json();
+      }
+    }).then((data) => {
+      setc2Coaches(data.row)
+    }).catch((error) => {
+      console.log(error);
+    })
+    fetch("http://localhost:5000/get-class-coaches",{
+      method: "POST",
+      mode: "cors",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ "class" : "3"})
+    }).then((response) => {
+      if(response.ok) {
+        return response.json();
+      }
+    }).then((data) => {
+      setc3Coaches(data.row)
+    }).catch((error) => {
+      console.log(error);
+    })
     if(order === 0) {
       fetch("http://localhost:5000/class/1").then((response) => {
         if(response.ok) {
@@ -23,7 +68,7 @@ function ClassesPage({email, name, isCoach, setUser}) {
       }).catch((error) => {
         console.log(error);
       })
-  
+      
       fetch("http://localhost:5000/class/2").then((response) => {
         if(response.ok) {
           return response.json();
@@ -97,7 +142,45 @@ function ClassesPage({email, name, isCoach, setUser}) {
       console.log(error);
     })
   }
-
+  const class1Coaches = c1Coaches.map((member) => 
+    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {member.name}
+      </th>
+      <td class="px-6 py-4">
+        {member.phone}
+      </td>
+      <td class="px-6 py-4">
+        {member.email}
+      </td>
+    </tr>
+  );
+  const class2Coaches = c2Coaches.map((member) => 
+    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {member.name}
+      </th>
+      <td class="px-6 py-4">
+        {member.phone}
+      </td>
+      <td class="px-6 py-4">
+        {member.email}
+      </td>
+    </tr>
+  );
+  const class3Coaches = c3Coaches.map((member) => 
+    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {member.name}
+      </th>
+      <td class="px-6 py-4">
+        {member.phone}
+      </td>
+      <td class="px-6 py-4">
+        {member.email}
+      </td>
+    </tr>
+  );
   const class1Members = class1.map((member) => 
     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -171,7 +254,26 @@ function ClassesPage({email, name, isCoach, setUser}) {
 
       </div>
       <h1 class="text-gray-900 uppercase text-2xl font-bold my-2 ml-4">Class 1</h1>
-
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                  Coach
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Phone Number
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Email
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {class1Coaches}
+          </tbody>
+        </table>
+      </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -204,6 +306,26 @@ function ClassesPage({email, name, isCoach, setUser}) {
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">
+                  Coach
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Phone Number
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Email
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {class2Coaches}
+          </tbody>
+        </table>
+      </div>
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">
                   Name
               </th>
               <th scope="col" class="px-6 py-3">
@@ -226,6 +348,26 @@ function ClassesPage({email, name, isCoach, setUser}) {
         </table>
       </div>
       <h1 class="text-gray-900 uppercase text-2xl font-bold my-2 ml-4">Class 3</h1>
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                  Coach 
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Phone Number
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Email
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {class3Coaches}
+          </tbody>
+        </table>
+      </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
