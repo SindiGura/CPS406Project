@@ -9,7 +9,6 @@ function CreateAccountPage() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [coach, setCoach] = useState("");
 
   const [checked, setChecked] = React.useState(false);
 
@@ -34,7 +33,7 @@ function CreateAccountPage() {
         method: "POST",
         mode: "cors",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}`, "name" : `${name}`, "address" : `${address}`, "phone" : `${phone}`, "isCoach" : `${coach}`})
+        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}`, "name" : `${name}`, "address" : `${address}`, "phone" : `${phone}`, "isCoach" : `${checked}`})
       }).then((response) => {
         if(response.ok) {
           window.location.href=(`/login`)

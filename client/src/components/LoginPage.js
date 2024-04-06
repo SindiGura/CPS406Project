@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import TreasurerPage from './TreasurerPage';
 
 function LoginPage({setUser}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [treasurer, setTreasurer] = useState(false)
-  const [coach, setCoach] = useState(false);
   const navigate = useNavigate();
 
   const [checked, setChecked] = React.useState(false);
+
+  useEffect(()=>{
+    console.log(checked)
+  })
 
   const handleChange = () => {
     setChecked(!checked);
@@ -23,21 +25,25 @@ function LoginPage({setUser}) {
     else if (!password)
       console.error("You need a password")
     else if(password === "123" && email === "treasurer@email.com") {
-      setTreasurer(true);
+      navigate("/treasurer");
     }
     else {//get server response and post info
       fetch("http://localhost:5000/login", {
         method: "POST",
         mode: "cors",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}` , "isCoach" : `${coach}`})
+        body: JSON.stringify({ "email" : `${email}`, "password" : `${password}` , "isCoach" : `${checked}`})
       }).then((response) => {
         if(response.ok) {
           return response.json();
         }
       }).then((data) => {
         setUser(data.row[0].email, data.row[0].name)
-        navigate("/home");
+        if(!checked)
+          navigate("/home");
+        else
+          navigate("/coach");
+        
       }).catch((error) => {
         console.log(error);
       })
@@ -46,7 +52,7 @@ function LoginPage({setUser}) {
 
   return (
     <section>
-      {treasurer ? <TreasurerPage/> : 
+      
       <div className="relative items-center w-full px-5 py-40 mx-auto md:px-12 lg:px-20 max-w-7xl">
         <div className="w-full max-w-md mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4">
           <div className="flex flex-col">
@@ -109,7 +115,7 @@ function LoginPage({setUser}) {
             </div>
           </form>
         </div>
-      </div>}
+      </div>
     </section>
   );
 }

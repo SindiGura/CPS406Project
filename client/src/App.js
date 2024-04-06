@@ -5,6 +5,8 @@ import LoginPage from './components/LoginPage';
 import CreateAccountPage from './components/CreateAccountPage';
 import ClassesPage from './components/ClassesPage';
 import HomePage from './components/HomePage';
+import Coach from './components/CoachPage';
+import TreasurerPage from './components/TreasurerPage';
 import { useState } from 'react';
 
 function App() {
@@ -32,6 +34,12 @@ function App() {
       }/>
       <Route path="/home" element={
         <HomePage name={name} email={email}/>
+      }/>
+      <Route path="/coach" element={
+        <Coach name={name} email={email}/>
+      }/>
+      <Route path="/treasurer" element={
+        <TreasurerPage/>
       }/>
     </Routes>
   );

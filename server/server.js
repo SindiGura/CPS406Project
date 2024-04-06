@@ -33,6 +33,7 @@ app.listen(PORT, () => {
     })
 })
 
+
 app.post("/submit-classes", (req, res) => {
     if(req.body.class1 === "1" || req.body.class1pay === "1"){
         database.all("delete from class1 where member = $email",
@@ -237,6 +238,36 @@ app.post("/members/:num", (req, res) => {
     }
 })
 
+app.post("/deleteClass/:num",(req,res)=>{
+    if(req.params.num === "1"){
+        database.all("DELETE FROM class1 WHERE member = (SELECT email FROM members WHERE name = $name)",{
+            $name: req.body.name
+        },(error)=>{
+            if(error){
+                res.sendStatus(500);
+            }
+        })
+    }
+    else if(req.params.num === "2"){
+        database.all("DELETE FROM class2 WHERE member = (SELECT email FROM members WHERE name = $name)",{
+            $name: req.body.name
+        },(error)=>{
+            if(error){
+                res.sendStatus(500);
+            }
+        })
+    }
+    else if(req.params.num === "3"){
+        database.all("DELETE FROM class3 WHERE member = (SELECT email FROM members WHERE name = $name)",{
+            $name: req.body.name
+        },(error)=>{
+            if(error){
+                res.sendStatus(500);
+            }
+        })
+    }
+})
+
 app.get("/class/:num", (req, res) => {
     if(req.params.num === "1") {
         database.all("select name, phone, address, paid from class1 inner join members on members.email = class1.member",
@@ -326,6 +357,19 @@ app.get("/debt", (req, res) => {
         }
     })
 })
+
+app.get("/get-coaches", (req, res) => {
+    database.all("select * from coaches",
+    (error, row) => {
+        if(error) {
+            res.sendStatus(500);
+        }
+        else {
+            res.status(200).json({row: row});
+        }
+    })
+})
+
 
 app.get("/revenue", (req, res) => {
     database.all("select * from revenue",
