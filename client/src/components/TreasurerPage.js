@@ -198,13 +198,7 @@ function TreasurerPage() {
           </tbody>
         </table>
       </div>
-
-      <div className="col-span-full block mb-3 text-md font-medium text-gray-600 my-2 ml-4">
-        {`Total Debt: $${totalDebt}`}
-      </div>
       <h1 class="text-gray-900 uppercase text-2xl font-bold my-2 ml-4">{`Profit: $${totalRevenue - totalDebt}`}</h1>
-      <h1 class="text-gray-900 uppercase text-2xl font-bold my-2 ml-4">{`Profit: $${totalRevenue - totalDebt}`}</h1>
-      
     </div>
   );
 }
