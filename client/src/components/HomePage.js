@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Payment from './Payment';
 
-function HomePage({email,name}) {
+function HomePage({email,name,setUser}) {
   const navigate = useNavigate();
   const [dropDown, setDropDown] = useState(false);
   const [payment, showPayment] = useState(false);
@@ -23,11 +23,13 @@ function HomePage({email,name}) {
   const [class3, setClass3] = useState("You are not currently attending Class 3, would you like to join?");
   const [class3Pay, setClass3Pay] = useState("Would you like to pay now or later?");
 
-  const onClosePayment = () => showPayment(false)
-  const onSubmitPayment = () => setPaymentState(true);
-
+  const onClosePayment = () => showPayment(false);
+  
+  const onSubmitPayment = () => {
+    setPaymentState(true);
+  }
   async function handleSubmit(e) {
-    if(!paymentState && !aClass1Pay && !aClass2Pay && !aClass3Pay) {
+    if(!paymentState && (aClass1Pay === 1 || aClass2Pay === 1 || aClass3Pay === 1)) {
       e.preventDefault()
       showPayment(true) 
     }
@@ -52,6 +54,7 @@ function HomePage({email,name}) {
         body: JSON.stringify({ "member" : `${email}`, "class1" : `${aClass1}`, "class2" : `${aClass2}`, "class3" : `${aClass3}`, "class1pay" : `${aClass1Pay}`, "class2pay" : `${aClass2Pay}`, "class3pay" : `${aClass3Pay}` })
       }).then((response)=>{
         if(response.ok){
+          setUser(email,name)
           navigate("/home")
           console.log("WORKED");
         }

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import {ToastContainer,toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function LoginPage({setUser}) {
   const [email, setEmail] = useState("");
@@ -21,9 +23,9 @@ function LoginPage({setUser}) {
   async function handleSubmit(e) {
     e.preventDefault(); 
     if(!email)
-      console.error("You need a email")
+      toast.warning("You need a email")
     else if (!password)
-      console.error("You need a password")
+      toast.warning("You need a password")
     else if(password === "123" && email === "treasurer@email.com") {
       navigate("/treasurer");
     }
@@ -37,6 +39,8 @@ function LoginPage({setUser}) {
         if(response.ok) {
           return response.json();
         }
+        else
+          toast.warning("Incorrect login details. If you are a coach, please check the box.")
       }).then((data) => {
         setUser(data.row[0].email, data.row[0].name)
         if(!checked)
@@ -115,6 +119,7 @@ function LoginPage({setUser}) {
             </div>
           </form>
         </div>
+        <ToastContainer />
       </div>
     </section>
   );

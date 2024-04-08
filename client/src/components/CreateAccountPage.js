@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import {ToastContainer,toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function CreateAccountPage() {
 
@@ -19,17 +21,17 @@ function CreateAccountPage() {
   async function handleSubmit(e) {
     e.preventDefault(); 
     if(!email)
-      console.error("You need an email")
+      toast.warning("You need an email")
     else if (!password)
-      console.error("You need a password")
+      toast.warning("You need a password")
     else if (!name)
-      console.error("You need a name")
+      toast.warning("You need a name")
     else if (!address)
-      console.error("You need an address")
+    toast.warning("You need an address")
     else if (!phone)
-      console.error("You need a phone number")
+    toast.warning("You need a phone number")
     else {//get server response and post info
-      fetch("http://localhost:5000/create-account", {
+      await fetch("http://localhost:5000/create-account", {
         method: "POST",
         mode: "cors",
         headers: {"Content-Type": "application/json"},
@@ -38,7 +40,11 @@ function CreateAccountPage() {
         if(response.ok) {
           window.location.href=(`/login`)
         }
+        else{
+          toast.warning("Something went wrong")
+        }
       }).catch((error) => {
+        toast.warning("Account already exists")
         console.log(error);
       })
     }
@@ -148,6 +154,7 @@ function CreateAccountPage() {
             </div>
           </form>
         </div>
+        <ToastContainer />
       </div>
     </section>
   );

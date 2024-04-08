@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom'
+import {ToastContainer,toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function ClassesPage({email, name, isCoach, setUser}) {
   const navigate = useNavigate();
@@ -11,9 +13,7 @@ function ClassesPage({email, name, isCoach, setUser}) {
   const [class2, setClass2] = useState([]);
   const [class3, setClass3] = useState([]);
   const [order, setOrder] = useState(0);
-  const [remove1, setRemove1] = useState(false);
-  const [remove2, setRemove2] = useState(false);
-  const [remove3, setRemove3] = useState(false);
+
 
   useEffect(() => {
     fetch("http://localhost:5000/get-class-coaches",{
@@ -127,7 +127,6 @@ function ClassesPage({email, name, isCoach, setUser}) {
   }
 
   async function handleSubmit(name,classNum) {
-    console.log("lololol")
     fetch("http://localhost:5000/deleteClass/"+classNum, {
       method: "POST",
       mode: "cors",
@@ -135,8 +134,6 @@ function ClassesPage({email, name, isCoach, setUser}) {
       body: JSON.stringify({ "name" : `${name}`})
     }).then((response) => {
       if(response.ok) {
-        setUser(email,name);
-        navigate("/classes")
       }
     }).catch((error) => {
       console.log(error);
@@ -394,6 +391,7 @@ function ClassesPage({email, name, isCoach, setUser}) {
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </div>
   );
 }

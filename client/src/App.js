@@ -33,7 +33,7 @@ function App() {
         <ClassesPage />
       }/>
       <Route path="/home" element={
-        <HomePage name={name} email={email}/>
+        <HomePage name={name} email={email} setUser={setUser}/>
       }/>
       <Route path="/coach" element={
         <Coach name={name} email={email}/>

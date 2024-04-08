@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
+import {ToastContainer,toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function Payment({visible,onClose,paymentState}) {   
   const [cardNum, setCardNum ] = useState("");
@@ -12,13 +14,13 @@ function Payment({visible,onClose,paymentState}) {
   async function handleSubmit(e) {
     e.preventDefault(); 
     if(!cardNum || cardNum.length < 19)
-      console.error("Invalid credit card number")
+      toast.warning("Invalid credit card number")
     if (!cardName)
-      console.error("Inavlid credit card holder")
+      toast.warning("Inavlid credit card holder")
     if (!date)
-      console.error("Inavlid expiry date")
+      toast.warning("Inavlid expiry date")
     if (!threeDigit || threeDigit.length < 3)
-      console.error("Please provide the three digits on the back of your card")
+      toast.warning("Please provide the three digits on the back of your card")
     if (cardNum.length === 19 && cardName && date && threeDigit.length === 3) {//get server response and post info
       paymentState();
       onClose()
@@ -120,6 +122,7 @@ function Payment({visible,onClose,paymentState}) {
             </form>
             </div>
         </div>
+        <ToastContainer />
         </section>
     </div>
   );

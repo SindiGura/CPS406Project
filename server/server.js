@@ -192,7 +192,7 @@ app.post("/create-account", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-    if(!req.body.isCoach){
+    if(req.body.isCoach === "false"){
         database.all("select * from members where email = $email",
         {
             $email: req.body.email
