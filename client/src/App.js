@@ -7,6 +7,7 @@ import ClassesPage from './components/ClassesPage';
 import HomePage from './components/HomePage';
 import Coach from './components/CoachPage';
 import TreasurerPage from './components/TreasurerPage';
+import ContactUs from './components/Contact';
 import { useState } from 'react';
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
       }/>
       <Route path="/treasurer" element={
         <TreasurerPage/>
+      }/>
+      <Route path="/contact" element={
+        <ContactUs/>
       }/>
     </Routes>
   );

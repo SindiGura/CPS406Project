@@ -33,6 +33,7 @@ app.listen(PORT, () => {
     })
 })
 
+
 app.post("/update-coach-classes",(req,res)=>{
     database.all("UPDATE COACHES SET classes = $class WHERE name = $name",{
         $class : req.body.class,
@@ -402,6 +403,18 @@ app.post("/get-coaches-name", (req, res) => {
 
 app.get("/get-coaches", (req, res) => {
     database.all("select * from coaches",
+    (error, row) => {
+        if(error) {
+            res.sendStatus(500);
+        }
+        else {
+            res.status(200).json({row: row});
+        }
+    })
+})
+
+app.get("/members", (req, res) => {
+    database.all("select * from members",
     (error, row) => {
         if(error) {
             res.sendStatus(500);
